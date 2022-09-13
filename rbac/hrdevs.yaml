@@ -1,0 +1,49 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    openshift.io/description: Grants permissions required for developers. Intended to be used with Group claims from external identity providers
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  name: app-dev
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - replicationcontrollers
+  verbs:
+  - get
+  - list
+  - update
+  - delete
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - replicationcontrollers/scale
+  verbs:
+  - get
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods/log
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:  
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+  name: hr-app-developers
+  namespace: hr-apps
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: app-dev
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: Group
+  name: hr-app-developers
+
