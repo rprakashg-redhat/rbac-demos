@@ -9,11 +9,11 @@
           - yaml
 
     - name: create the secret to store client Secret from external identity provider
-      command: oc create secret generic openid-okta-secret --from-literal=clientSecret={{clientSecret}} -n openshift-config
+      command: oc create secret generic {{ secretName }} --from-literal=clientSecret={{clientSecret}} -n openshift-config
 
     - name: configure oauth 
       kubernetes.core.k8s:
         api_key: "{{ token }}"
         state: present
-        apply: true
+        apply: false
         resource_definition: "{{ lookup('template', 'templates/oauth.yaml.j2') | from_yaml }}"
