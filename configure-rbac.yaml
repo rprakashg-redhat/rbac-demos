@@ -1,0 +1,24 @@
+- name: Configure cluster RBAC
+  hosts: localhost
+  vars_files:
+  - vars/static/vars.yaml
+  tasks:
+    - name: debug providers var
+      ansible.builtin.debug:
+        var: customRoles
+
+    - name: grant cluster admin
+      ansible.builtin.shell: |
+        kubectl create clusterrolebinding okta-cluster-admin-crb --dry-run=client --clusterrole=cluster-admin --group {{ providers.okta.adminClaim }} -o yaml | kubectl apply -f -
+    
+    - name: create contributor clusterrole
+      kubernetes.core.k8s:
+        state: present
+        apply: true
+        definition: "{{ lookup('template', 'templates/contributor.yaml') }}"
+
+    - name: Assigning permissions
+      kubernetes.core.k8s:
+        state: present
+        apply: true
+        resource_definition: "{{ lookup('template', 'templates/rb.yaml.j2') }}"

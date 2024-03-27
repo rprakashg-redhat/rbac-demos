@@ -1,0 +1,119 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: contributor
+rules:
+- apiGroups: ["apps"]
+  resources:
+    - daemonsets
+    - deployments
+    - deployments/rollback
+    - deployments/scale
+    - replicasets
+    - replicasets/scale
+    - statefulsets
+    - statefulsets/scale
+  verbs:
+    - create
+    - delete
+    - deletecollection
+    - patch
+    - update
+
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - get
+  - list
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+
+- apiGroups: 
+    - batch
+  resources: 
+    - jobs 
+    - cronjobs
+  verbs: 
+    - get
+    - list
+    - create
+    - update
+    - patch
+    - delete
+    - deletecollection
+
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  - networkpolicies
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+
+- apiGroups: 
+    - metrics.k8s.io
+  resources: 
+    - pods
+    - pods/log
+  verbs: 
+    - get
+    - list
+
+- apiGroups:
+  - ""
+  resources:
+  - bindings
+  - events
+  - limitranges
+  - namespaces/status
+  - pods/log
+  - pods/status
+  - replicationcontrollers/status
+  - resourcequotas
+  - resourcequotas/status
+  verbs:
+  - get
+  - list
+
+#openshifty things
+- apiGroups: 
+    - project.openshift.io
+  resources: 
+    - projects
+  verbs: 
+    - get
+
+- apiGroups:
+  - build.openshift.io
+  resources:
+  - buildlogs
+  verbs:
+  - get
+  - list
+
+- apiGroups:
+  - route.openshift.io
+  resources:
+  - routes
+  verbs:
+  - get
+  - list
+
+- apiGroups:
+  - build.openshift.io
+  resources:
+  - buildconfigs
+  - buildconfigs/webhooks
+  - builds
+  verbs:
+  - get
+  - list

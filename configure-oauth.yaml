@@ -1,0 +1,25 @@
+- name: configure OAuth playbook
+  hosts: localhost
+  vars_files:
+  - vars/static/vars.yaml
+  tasks:
+    - name: include variables
+      include_vars:
+        file: "{{ item }}"
+        hash_behaviour: merge
+      loop:
+        - vars/dynamic/vars.yaml
+    
+    - name: debug providers var
+      ansible.builtin.debug:
+        var: providers
+
+    - name: create secret to store idp clientsecret
+      ansible.builtin.shell: |
+        kubectl create secret --dry-run=client -n openshift-config generic {{ providers.okta.secretName }} --from-literal=clientSecret={{ providers.okta.clientSecret}} -o yaml | kubectl apply -f -
+
+    - name: configure oauth 
+      kubernetes.core.k8s:
+        state: present
+        apply: false
+        resource_definition: "{{ lookup('template', 'templates/oauth.yaml.j2') | from_yaml }}"

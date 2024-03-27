@@ -1,0 +1,19 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+  namespace: openshift-config
+spec:
+  identityProviders:
+    - mappingMethod: claim
+      name: {{ providers.okta.name }}
+      openID:
+        claims:
+          {{ providers.okta.claims | to_nice_yaml | indent(10) }}
+        extraScopes:
+          {{ providers.okta.extraScopes | to_nice_yaml | indent(10) }}
+        issuer: {{ providers.okta.issuer }}
+        clientID: {{ providers.okta.clientId }}
+        clientSecret:
+          name: {{ providers.okta.secretName }}
+      type: OpenID

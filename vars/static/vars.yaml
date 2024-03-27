@@ -1,0 +1,39 @@
+---
+customRoles:
+  contributor:
+    name: "contributor"
+    assignTo:
+      - claim: teama
+        namespace: teama
+      - claim: teamb
+        namespace: teamb
+providers:
+  okta:
+    name: okta
+    claims:
+      email:
+      - email
+      name:
+      - name
+      preferredUsername:
+      - preferred_username
+      groups:
+      - groups
+    extraScopes:
+    - email
+    - profile
+    - groups
+    issuer:  https://dev-6782679.okta.com
+    secretName: okta-secret
+    adminClaim: cluster-admins
+#- name: aad
+#  claims:
+#    email:
+#    - email
+#    name:
+#    - name
+#    preferredUsername:
+#    - upn
+#    groups:
+#    - groups
+#  issuer: https://login.microsoftonline.com/64dc69e4-d083-49fc-9569-ebece1dd1408
