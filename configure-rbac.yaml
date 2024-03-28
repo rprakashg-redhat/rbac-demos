@@ -17,7 +17,7 @@
         apply: true
         definition: "{{ lookup('template', 'templates/contributor.yaml') }}"
 
-    - name: Assigning permissions
+    - name: Assigning contributor opermissions
       kubernetes.core.k8s:
         state: present
         apply: true

@@ -14,6 +14,8 @@ rules:
     - statefulsets
     - statefulsets/scale
   verbs:
+    - get
+    - list
     - create
     - delete
     - deletecollection
@@ -53,13 +55,37 @@ rules:
   - ingresses
   - networkpolicies
   verbs:
+  - get
+  - list
   - create
   - delete
   - deletecollection
   - patch
   - update
 
-- apiGroups: 
+- apiGroups:
+    - ""
+  resources: 
+    - namespaces
+  verbs: 
+    - get
+    - list
+
+- apiGroups:
+    - ""
+  resources:
+    - configmaps
+    - secrets
+  verbs:
+    - get
+    - list
+    - create
+    - delete
+    - patch
+    - update
+
+- apiGroups:
+    - ""
     - metrics.k8s.io
   resources: 
     - pods
@@ -83,7 +109,18 @@ rules:
   verbs:
   - get
   - list
-
+- apiGroups:
+    - ""
+  resources:
+    - services
+  verbs:
+    - get
+    - list
+    - create
+    - update
+    - patch
+    - delete
+    
 #openshifty things
 - apiGroups: 
     - project.openshift.io
@@ -91,6 +128,7 @@ rules:
     - projects
   verbs: 
     - get
+    - list
 
 - apiGroups:
   - build.openshift.io
@@ -114,6 +152,14 @@ rules:
   - buildconfigs
   - buildconfigs/webhooks
   - builds
+  verbs:
+  - get
+  - list
+
+- apiGroups:
+    - operators.coreos.com
+  resources:
+    - clusterserviceversions
   verbs:
   - get
   - list
